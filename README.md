@@ -10,6 +10,7 @@ Automatically publishes images to github repo
 
 Each dockerfile target must have a `LABEL name="<name>`. This is used to name the published file
 
+If version is blank (recommended), the release tag version is used.
 
 ## Example Usage
 ```
