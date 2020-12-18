@@ -12,4 +12,5 @@ A GitHub Action that builds and publishes containers ffrom docker-compose file
       with:
         version: '0.2.6-rc.1' # optional
         docker_compose: 'docker-compose.build.yml' # required
+        repo_token: "${{ secrets.GITHUB_TOKEN }}"
 ```
