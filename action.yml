@@ -27,8 +27,9 @@ runs:
         if [ -z "$VERSION" ]; then
             VERSION=$(${{ github.action_path }}/src/version.sh)
         fi
+        echo "VERSION: $VERSION"
         echo "::set-output name=semver::$(echo $VERSION)"
       shell: bash
     - id: publish
-      run: /scripts/publish.sh $VERSION ${{ inputs.docker_compose }}
+      run: ${{ github.action_path }}/src/publish.sh $VERSION ${{ inputs.docker_compose }}
       shell: bash
