@@ -16,9 +16,19 @@ inputs:
 outputs:
   tag:
     description: "Tag that was published"
+    value: ${{ steps.tag.outputs.semver }}
 runs:
-  using: "docker"
-  image: "Dockerfile"
-  env:
-    VERSION: ${{ inputs.version }}
-    DOCKER_COMPOSE: ${{ inputs.docker_compose }}
+  using: "composite"
+  steps:
+    - id: tag
+      run: |
+        # if VERSION is not set, get it from git repo
+        VERSION="${{ inputs.version }}"
+        if [ -z "$VERSION" ]; then
+            VERSION=$(${{ github.action_path }}/src/version.sh)
+        fi
+        echo "::set-output name=semver::$(echo $VERSION)"
+      shell: bash
+    - id: publish
+      run: /scripts/publish.sh $VERSION ${{ inputs.docker_compose }}
+      shell: bash
