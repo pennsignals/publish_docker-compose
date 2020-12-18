@@ -13,6 +13,10 @@ inputs:
   docker_compose:
     description: "docker-compose file to build and publish images from"
     required: true
+  repo_token: 
+    description: "Github Repo token ${{ secrets.GITHUB_TOKEN }}"
+    required: false
+    default: ''
 outputs:
   tag:
     description: "Tag that was published"
@@ -31,5 +35,5 @@ runs:
         echo "::set-output name=semver::$(echo $VERSION)"
       shell: bash
     - id: publish
-      run: ${{ github.action_path }}/src/publish.sh $VERSION ${{ inputs.docker_compose }}
+      run: ${{ github.action_path }}/src/publish.sh $VERSION ${{ inputs.docker_compose }} ${{ inputs.repo_token }}
       shell: bash
