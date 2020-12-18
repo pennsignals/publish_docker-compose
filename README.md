@@ -1,6 +1,6 @@
 # Docker-Compose Publish
 
-A GitHub Action that builds and publishes containers from docker-compose file
+A GitHub Action that builds and publishes containers from docker-compose file to the current github repository
 
 ## Features
 
@@ -21,6 +21,23 @@ If version is blank (recommended), the release tag version is used.
         docker_compose: 'docker-compose.build.yml' # required
         repo_token: "${{ secrets.GITHUB_TOKEN }}"
 ```
+
+## Input
+
+Below is a breakdown of the expected action inputs.
+
+### `version`
+
+Tag to be published
+
+
+### `docker_compose`
+
+docker-compose file to use
+
+### `repo_token`
+
+repository token: ${{ secrets.GITHUB_TOKEN }}
 
 ## Docker-compose file
 ```
