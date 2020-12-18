@@ -1,0 +1,24 @@
+# action.yml
+name: "Docker-Compose Publish"
+author: "Darryl Mendillo"
+description: "Publish all docker containers in docker-compose file"
+branding:
+  icon: "database"
+  color: "red"
+inputs:
+  version:
+    description: "Release version (tag)"
+    required: false
+    default: ''
+  docker_compose:
+    description: "docker-compose file to build and publish images from"
+    required: true
+outputs:
+  tag:
+    description: "Tag that was published"
+runs:
+  using: "docker"
+  image: "Dockerfile"
+  env:
+    VERSION: ${{ inputs.version }}
+    DOCKER_COMPOSE: ${{ inputs.docker_compose }}

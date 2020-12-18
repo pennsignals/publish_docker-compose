@@ -1,0 +1,72 @@
+name: publish
+
+on:
+  release:
+    types:
+    - published
+
+jobs:
+
+  publish:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: checkout
+      uses: actions/checkout@v2.3.4
+
+    - name: version
+      run: |
+        # Tagged release
+        if [[ ${{ github.ref }} == refs/tags/* ]]; then
+          # Strip git ref prefix from $VERSION
+          TAGNAME=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
+          # Strip "v" prefix from tag name
+          VERSION=$(echo $TAGNAME | sed -e 's/^v//')
+        else
+          VERSION=${{ github.sha }}
+        fi
+
+        echo "VERSION=$VERSION" >> $GITHUB_ENV
+        echo "GITHUB_REF=$GITHUB_REF" >> $GITHUB_ENV
+
+        # write .env to export ENV VARIABLES as artifacts for use in other workflow_run runs
+        echo "PUBLISH_VERSION=$VERSION" >> .env
+        echo "PUBLISH_GITHUB_REF=$GITHUB_REF" >> .env
+
+        echo "Version: $VERSION"
+
+        export DOCKER_BUILDKIT=1
+
+    - name: publish
+      run: |
+        VERSION="${{ env.VERSION }}"
+
+        echo ${{ secrets.GITHUB_TOKEN }} | docker login docker.pkg.github.com -u ${{ github.actor }} --password-stdin
+
+        # build and run the docker images
+        docker-compose -f docker-compose.build.yml up --no-start
+
+        # get all built IDs
+        IMAGE_IDs=$(docker-compose -f docker-compose.build.yml images -q)
+
+        echo "IMAGE_IDs: $IMAGE_IDs"
+
+        while read -r IMAGE_ID; do
+
+            echo "IMAGE_ID: $IMAGE_ID"
+            # get the name label
+            NAME=$(basename ${{ github.repository }}).$(docker inspect --format '{{ index .Config.Labels.name }}' $IMAGE_ID)
+            PUSH="docker.pkg.github.com/${{ github.repository }}/$NAME:$VERSION"
+
+            # tag and push
+            docker tag $IMAGE_ID $PUSH
+            docker push $PUSH
+
+        done <<< "$IMAGE_IDs"
+
+    # Upload reference as artifact to pass to deploy
+    - name: upload .env
+      uses: actions/upload-artifact@v2
+      with:
+        name: env
+        path: .env
