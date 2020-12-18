@@ -33,6 +33,7 @@ runs:
         fi
         echo "VERSION: $VERSION"
         echo "::set-output name=semver::$(echo $VERSION)"
+        echo "VERSION=$VERSION" >> $GITHUB_ENV
       shell: bash
     - id: publish
       run: ${{ github.action_path }}/src/publish.sh $VERSION ${{ inputs.docker_compose }} ${{ inputs.repo_token }}
