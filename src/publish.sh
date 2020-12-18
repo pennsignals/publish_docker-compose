@@ -5,7 +5,7 @@ REPO_TOKEN="$3"
 echo "VERSION=$VERSION"
 echo "DOCKER_COMPOSE=$DOCKER_COMPOSE"
 
-# echo ${REPO_TOKEN} | docker login docker.pkg.github.com -u ${GITHUB_REF} --password-stdin
+# login to github
 docker login docker.pkg.github.com -u ${GITHUB_REF} -p ${REPO_TOKEN}
 
 # build and run the docker images
