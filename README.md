@@ -15,7 +15,7 @@ If version is blank (recommended), the release tag version is used.
 ## Example Usage
 ```
     - name: publish
-      uses: pennsignals/publish_docker-compose@v1.0.0
+      uses: pennsignals/publish_docker-compose@v0.1.0
       with:
         version: '0.2.6-rc.1' # optional
         docker_compose: 'docker-compose.build.yml' # required
