@@ -9,7 +9,7 @@ echo "DOCKER_COMPOSE=$DOCKER_COMPOSE"
 docker login docker.pkg.github.com -u ${GITHUB_REF} -p ${REPO_TOKEN}
 
 # build and run the docker images
-docker-compose -f $DOCKER_COMPOSE up --no-start
+VERSION=$VERSION docker-compose -f $DOCKER_COMPOSE up --no-start
 
 # get all built IDs
 IMAGE_IDs=$(docker-compose -f $DOCKER_COMPOSE images -q)
