@@ -11,7 +11,7 @@ VERSION=$VERSION docker-compose -f docker-compose.yml -f $OVERRIDE up --no-start
 IMAGES=$(docker inspect --format='{{.Image}}' $(docker ps -aq))
 
 echo "IMAGES: $IMAGES"
-for $IMAGE in $IMAGES; do
+for IMAGE in $IMAGES; do
     echo "IMAGE: $IMAGE"
     NAME=$(docker inspect --format '{{index .Config.Labels "name"}}' $IMAGE)
     TAG="ghcr.io/${{ github.repository }}/$NAME:$VERSION"
