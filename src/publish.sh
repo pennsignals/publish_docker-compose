@@ -22,5 +22,3 @@ for IMAGE in $IMAGES; do
     docker push $TAG
     docker push $LATEST
 done
-
-VERSION=$VERSION docker-compose -f docker-compose.yml -f $OVERRIDE down
