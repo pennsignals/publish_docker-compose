@@ -13,10 +13,11 @@ IMAGES=$(docker inspect --format='{{.Image}}' $(docker ps -aq))
 echo "IMAGES: $IMAGES"
 for IMAGE in $IMAGES; do
     echo "IMAGE: $IMAGE"
-    NAME=$(docker inspect --format '{{index .Config.Labels "name"}}' $IMAGE)
-    TAG="ghcr.io/${{ github.repository }}/$NAME:$VERSION"
-    LATEST="ghcr.io/${{ github.repository }}/$NAME:latest"
-    echo "NAME: $NAME, IMAGE: $IMAGE, TAG: $TAG, LATEST: $LATEST"
+    
+    NAME=$(basename ${GITHUB_REPOSITORY}).$(docker inspect --format '{{ index .Config.Labels "name" }}' $IMAGE)
+    TAG="ghrc.io/${GITHUB_REPOSITORY}/$NAME:$VERSION"
+    LATEST="ghcr.io/${GITHUB_REPOSITORY}/$NAME:latest"
+
     docker tag $IMAGE $TAG
     docker tag $IMAGE $LATEST
     docker push $TAG
