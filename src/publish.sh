@@ -16,10 +16,7 @@ for IMAGE in $IMAGES; do
     
     NAME=$(basename ${GITHUB_REPOSITORY}).$(docker inspect --format '{{ index .Config.Labels "name" }}' $IMAGE)
     TAG="ghrc.io/${GITHUB_REPOSITORY}/$NAME:$VERSION"
-    LATEST="ghcr.io/${GITHUB_REPOSITORY}/$NAME:latest"
 
     docker tag $IMAGE $TAG
-    docker tag $IMAGE $LATEST
     docker push $TAG
-    docker push $LATEST
 done
