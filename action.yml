@@ -13,7 +13,7 @@ inputs:
   docker_compose:
     description: "docker-compose file to build and publish images from"
     required: true
-  repo_token: 
+  repo_token:
     description: "Github Repo token"
     required: false
     default: ''
